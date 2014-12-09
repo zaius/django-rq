@@ -20,6 +20,7 @@
 
 <div id="content-main">
 
+    <h2>Queues</h2>
     <div class="module">
         <table>
             <thead>
@@ -81,6 +82,58 @@
         <br />
         <a href="{% url 'rq_home_json' %}">View as JSON</a>
     </div>
+
+    <h2>RQ Workers</h2>
+    <div class="module">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Queues</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for worker in workers %}
+                    <tr class = "{% cycle 'row1' 'row2' %}">
+                        <th>{{ worker.name }}</th>
+                        <td>{{ worker.get_state }}</td>
+                        <td>{{ worker.queues|join:', ' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if scheduler_installed %}
+        <h2>Scheduled jobs</h2>
+
+        <div class="module">
+          <div>
+              Scheduler: {{ scheduler_running }}
+          </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Run at</th>
+                        <th>Target queue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in scheduled_jobs %}
+                        <tr class = "{% cycle 'row1' 'row2' %}">
+                            <th>{{ item.job.description }}</th>
+                            <td>{{ item.job.get_status }}</td>
+                            <td>{{ item.runtime }}</td>
+                            <td>{{ item.queue }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
 
 {% endblock %}
