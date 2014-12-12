@@ -91,6 +91,8 @@
                     <th>Name</th>
                     <th>State</th>
                     <th>Queues</th>
+                    <th>Current Job</th>
+                    <th>On Queue</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,6 +101,11 @@
                         <th>{{ worker.name }}</th>
                         <td>{{ worker.get_state }}</td>
                         <td>{{ worker.queues|join:', ' }}</td>
+
+                        {# These only apply to "busy" workers. Might be nicer
+                        to put this info in a separate table. #}
+                        <td>{{ worker.get_current_job.description }}</td>
+                        <td>{{ worker.get_current_job.origin }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
