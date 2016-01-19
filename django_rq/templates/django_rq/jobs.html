@@ -73,6 +73,7 @@
                             <th><div class = 'text'><span>Enqueued</span></div></th>
                             <th><div class = 'text'><span>Status</span></div></th>
                             <th><div class = 'text'><span>Callable</span></div></th>
+                            <th><div class = 'text'><span>Arguments</span></div></th>
                             {% block extra_columns %}
                             {% endblock extra_columns %}
                         </tr>
@@ -100,6 +101,10 @@
                                 </td>
                                 <td>{{ job.get_status }}</td>
                                 <td>{{ job|show_func_name }}</td>
+                                <td>
+                                  {{ job.args }}
+                                  {{ job.kwargs }}
+                                </td>
                                 {% block extra_columns_values %}
                                 {% endblock extra_columns_values %}
                             </tr>
