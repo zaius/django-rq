@@ -103,8 +103,16 @@
                         <td>{{ worker.queues|join:', ' }}</td>
 
                         {# These only apply to "busy" workers. Might be nicer to put this info in a separate table. #}
-                        <td>{{ worker.get_current_job.description }}</td>
-                        <td>{{ worker.get_current_job.origin }}</td>
+                        <td>
+                          {% if worker.get_current_job %}
+                            {{ worker.get_current_job.description }}
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if worker.get_current_job %}
+                            {{ worker.get_current_job.origin }}
+                          {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
