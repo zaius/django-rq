@@ -100,9 +100,29 @@ def get_statistics(run_maintenance_tasks=False):
         scheduler_running = connection.exists(scheduler.scheduler_key) and \
             not connection.hexists(scheduler.scheduler_key, 'death')
 
+    def job_serializer(job):
+        if not job:
+            return None
+        return {
+            'id': job.id,
+            'description': job.description,
+            'created_at': job.created_at,
+            'enqueued_at': job.enqueued_at,
+            'status': job.get_status(),
+            'func_name': job.func_name,
+            'args': job.args,
+            'kwargs': job.kwargs,
+        }
+
     return {
         'queues': queues,
-        'workers': list(set(workers)),
+        'workers': [{
+            'name': worker.name,
+            'state': worker.get_state(),
+            'birth': worker.birth_date,
+            'queue_names': worker.queue_names(),
+            'job': job_serializer(worker.get_current_job()),
+        } for worker in list(set(workers))],
         'scheduler_installed': scheduler_installed,
         'scheduler_running': 'running' if scheduler_running else 'stopped',
         'scheduled_jobs': scheduled_jobs,
