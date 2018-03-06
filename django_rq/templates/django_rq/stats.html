@@ -103,18 +103,18 @@
                 {% for worker in workers %}
                     <tr class = "{% cycle 'row1' 'row2' %}">
                         <th>{{ worker.name }}</th>
-                        <td>{{ worker.get_state }}</td>
-                        <td>{{ worker.queues|join:', ' }}</td>
+                        <td>{{ worker.state }}</td>
+                        <td>{{ worker.queue_names|join:', ' }}</td>
 
                         {# These only apply to "busy" workers. Might be nicer to put this info in a separate table. #}
                         <td>
-                          {% if worker.get_current_job %}
-                            {{ worker.get_current_job.description }}
+                          {% if worker.job %}
+                            {{ worker.job.description }}
                           {% endif %}
                         </td>
                         <td>
-                          {% if worker.get_current_job %}
-                            {{ worker.get_current_job.origin }}
+                          {% if worker.job %}
+                            {{ worker.job.origin }}
                           {% endif %}
                         </td>
                     </tr>

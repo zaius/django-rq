@@ -97,7 +97,7 @@
                                         {{ job.enqueued_at|to_localtime|date:"Y-m-d, H:i:s" }}
                                     {% endif %}
                                 </td>
-                                <td>{{ job.get_status }}</td>
+                                <td>{{ job.status }}</td>
                                 <td>{{ job.func_name }}</td>
                                 <td>
                                   {{ job.args }}
