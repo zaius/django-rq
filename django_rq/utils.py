@@ -91,22 +91,13 @@ def get_statistics():
     else:
         connection = get_connection('default')
         scheduler = Scheduler(connection=connection)
-        # get_jobs with_times returns a list of tuples: (job, datetime)
 
-        # TODO: job.origin is the scheduler queue originally used to schedule
-        # the job. Need to check if this is how the scheduler actually picks
-        # which queue to put the job into.
-        for job in scheduler.get_jobs(with_times=True):
-            scheduled_jobs.append({
-                'job': job[0],
-                'runtime': job[1],
-                'queue': job[0].origin,
-            })
+        scheduled_jobs = scheduler.get_jobs(with_times=True)
 
         # TODO: should expose this from rq-scheduler.
         # TODO: this is really per-queue.
-        scheduler_running = connection.exists(scheduler.scheduler_key) and \
-            not connection.hexists(scheduler.scheduler_key, 'death')
+        scheduler_running = (connection.exists(scheduler.scheduler_key) and
+            not connection.hexists(scheduler.scheduler_key, 'death'))
 
     def job_serializer(job):
         if not job:
@@ -122,6 +113,19 @@ def get_statistics():
             'kwargs': job.kwargs,
         }
 
+    def scheduled_job_serializer(job):
+        # job is actually tuple of (job, datetime)
+        if not job:
+            return None
+        # TODO: job.origin is the scheduler queue originally used to schedule
+        # the job. Need to check if this is how the scheduler actually picks
+        # which queue to put the job into.
+        return {
+            'job': job_serializer(job[0]),
+            'runtime': job[1],
+            'queue': job[0].origin,
+        }
+
     return {
         'queues': queues,
         'workers': [{
@@ -133,5 +137,7 @@ def get_statistics():
         } for worker in list(set(workers))],
         'scheduler_installed': scheduler_installed,
         'scheduler_running': 'running' if scheduler_running else 'stopped',
-        'scheduled_jobs': scheduled_jobs,
+        'scheduled_jobs': [
+            scheduled_job_serializer(job) for job in scheduled_jobs
+        ]
     }
