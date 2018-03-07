@@ -139,7 +139,7 @@
                     {% for item in scheduled_jobs %}
                         <tr class = "{% cycle 'row1' 'row2' %}">
                             <th>{{ item.job.description }}</th>
-                            <td>{{ item.job.get_status }}</td>
+                            <td>{{ item.job.status }}</td>
                             <td>{{ item.runtime }}</td>
                             <td>{{ item.queue }}</td>
                         </tr>
