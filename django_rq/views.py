@@ -174,12 +174,20 @@ def worker_details(request, queue_index, key):
 
     queue_names = ', '.join(worker.queue_names())
 
+    def get_job_graceful(worker):
+        if not worker:
+            return None
+        try:
+            return worker.get_current_job()
+        except NoSuchJobError:
+            return None
+
     context_data = {
         'queue': queue,
         'queue_index': queue_index,
         'worker': worker,
         'queue_names': queue_names,
-        'job': worker.get_current_job()
+        'job': get_job_graceful(worker)
     }
     return render(request, 'django_rq/worker_details.html', context_data)
 

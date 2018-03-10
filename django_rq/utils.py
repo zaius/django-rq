@@ -99,6 +99,14 @@ def get_statistics():
         scheduler_running = (connection.exists(scheduler.scheduler_key) and
             not connection.hexists(scheduler.scheduler_key, 'death'))
 
+    def get_job_graceful(worker):
+        if not worker:
+            return None
+        try:
+            return worker.get_current_job()
+        except NoSuchJobError:
+            return None
+
     def job_serializer(job):
         if not job:
             return None
@@ -133,7 +141,7 @@ def get_statistics():
             'state': worker.get_state(),
             'birth': worker.birth_date,
             'queue_names': worker.queue_names(),
-            'job': job_serializer(worker.get_current_job()),
+            'job': job_serializer(get_job_graceful(worker)),
         } for worker in list(set(workers))],
         'scheduler_installed': scheduler_installed,
         'scheduler_running': 'running' if scheduler_running else 'stopped',
