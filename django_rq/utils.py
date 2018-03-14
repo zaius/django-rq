@@ -2,6 +2,7 @@ from rq.registry import (DeferredJobRegistry, FailedJobRegistry,
                          FinishedJobRegistry, StartedJobRegistry, clean_registries)
 from rq.worker import Worker
 from rq.worker_registration import clean_worker_registry
+from rq.exceptions import NoSuchJobError
 
 from .queues import get_connection, get_queue_by_index
 from .settings import QUEUES_LIST
