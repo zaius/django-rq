@@ -1,5 +1,6 @@
 from rq.registry import (DeferredJobRegistry, FinishedJobRegistry,
                          StartedJobRegistry)
+from rq.exceptions import NoSuchJobError
 
 from .queues import get_connection, get_queue_by_index
 from .settings import QUEUES_LIST
