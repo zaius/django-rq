@@ -1,7 +1,7 @@
 from rq.decorators import job as _rq_job
 
 from django.conf import settings
-from django.utils import six
+import six
 
 from .queues import get_queue
 
