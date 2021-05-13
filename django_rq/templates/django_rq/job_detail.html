@@ -42,6 +42,17 @@
 
         <div class="form-row">
             <div>
+                <label class="required">View on LogDNA:</label>
+                <div class="data">
+                  <a href="https://app.logdna.com/2954db5ead/logs/view?q={{job.id}}">
+                    View on LogDNA
+                  </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div>
                 <label class="required">Queue:</label>
                 <div class="data">{{ job.origin }}</div>
             </div>
